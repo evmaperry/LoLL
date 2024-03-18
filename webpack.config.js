@@ -1,7 +1,13 @@
 const path = require('path');
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+
+const SRC_DIR = path.resolve(__dirname, 'client');
+const DIST_DIR = path.resolve(__dirname, 'dist');
 
 module.exports = {
-  entry: './client/index.tsx',
+  entry: path.resolve(SRC_DIR, 'index.tsx'),
+  mode: 'development',
   module: {
     rules: [
       {
@@ -16,6 +22,14 @@ module.exports = {
   },
   output: {
     filename: 'bundle.js',
-    path: path.resolve(__dirname, 'dist'),
+    path: DIST_DIR,
+    clean: true,
   },
+  plugins: [
+    // new BundleAnalyzerPlugin(),
+    new HtmlWebpackPlugin({
+      template: path.resolve(SRC_DIR, 'index.html'),
+    }
+    ),
+  ],
 };
