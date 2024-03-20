@@ -5,7 +5,7 @@
   "scripts": {
     "start": "nodemon server/index.ts --watch",
     "build": "npx webpack --watch",
-    "seed": "ts-node server/db/sync.ts && npx sequelize-cli db:seed:all"
+    "seed": "ts-node server/db/sync.ts && npx sequelize-cli db:seed --seed userSeeder.js && npx sequelize-cli db:seed --seed blogpostSeeder.js"
   },
   "dependencies": {
     "@emotion/react": "^11.11.4",
