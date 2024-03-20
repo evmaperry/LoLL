@@ -14,9 +14,18 @@ import GetInvolved from './components/GetInvolved';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
-    <Route path='/' element={<Home />}>
+    <Route>
       <Route
-        path='invasives'
+        path='/'
+        element={
+          <>
+            <TopNav />
+            <Home />
+          </>
+        }
+      />
+      <Route
+        path='/invasives'
         element={
           <>
             <TopNav />
@@ -25,7 +34,7 @@ const router = createBrowserRouter(
         }
       />
       <Route
-        path='mission'
+        path='/mission'
         element={
           <>
             <TopNav />
@@ -34,7 +43,7 @@ const router = createBrowserRouter(
         }
       />
       <Route
-        path='shoreline'
+        path='/shoreline'
         element={
           <>
             <TopNav />
@@ -43,7 +52,7 @@ const router = createBrowserRouter(
         }
       />
       <Route
-        path='getinvolved'
+        path='/getinvolved'
         element={
           <>
             <TopNav />

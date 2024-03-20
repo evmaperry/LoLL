@@ -6,7 +6,7 @@ const Home: React.FC = () => {
   return (
     <>
       <Splash />
-      <Typography variant='h1'>Home</Typography>
+      <Typography id='home-title' variant='h1'>Home</Typography>
     </>
   );
 };

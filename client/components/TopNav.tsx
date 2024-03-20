@@ -6,9 +6,11 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const TopNav: React.FC = () => {
+  const navigate = useNavigate();
+
   return (
     <Box color='secondary.light' sx={{ flexGrow: 1 }}>
       <AppBar color='transparent' position='fixed'>
@@ -30,8 +32,43 @@ const TopNav: React.FC = () => {
           >
             Long Lake Forever
           </Typography>
-          
-          <Button color='inherit'>Login</Button>
+          <Box>
+            <Button
+              onClick={() => {
+                navigate('/');
+              }}
+            >
+              Home
+            </Button>
+            <Button
+              onClick={() => {
+                navigate('/mission');
+              }}
+            >
+              Mission
+            </Button>
+            <Button
+              onClick={() => {
+                navigate('/invasives');
+              }}
+            >
+              Invasives
+            </Button>
+            <Button
+              onClick={() => {
+                navigate('/shoreline');
+              }}
+            >
+              Shoreline
+            </Button>
+            <Button
+              onClick={() => {
+                navigate('/getinvolved');
+              }}
+            >
+              Get Involved
+            </Button>
+          </Box>
         </Toolbar>
       </AppBar>
     </Box>
