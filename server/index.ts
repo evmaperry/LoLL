@@ -10,7 +10,10 @@ const port = 3000;
 
 const distPath = path.resolve(__dirname, '..', 'dist');
 
+app.use(express.json());
 app.use(express.static(distPath));
+
+
 
 app.use('/api/blog', BlogRoutes);
 

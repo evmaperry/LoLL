@@ -6,8 +6,8 @@ module.exports = {
       category: 'shoreline',
       userId: 1,
       createdAt: new Date(),
-      updatedAt: new Date()
-    }]);
+      updatedAt: new Date(),
+  }]);
 
     await queryInterface.bulkInsert('Keywords', [{
       keyword: 'event',
@@ -25,5 +25,5 @@ module.exports = {
   down: async (queryInterface, Sequelize) => {
     await queryInterface.bulkDelete('Keywords', null, {});
     await queryInterface.bulkDelete('Blogposts', null, {});
-  }
+  },
 };

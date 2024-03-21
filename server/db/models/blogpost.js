@@ -14,7 +14,9 @@ module.exports = (sequelize, Sequelize) => {
     },
   });
   Blogpost.associate = function (models) {
-    Blogpost.belongsToMany(models.user, {through: 'blogpost_keywords'});
+    Blogpost.belongsTo(models.user);
+    Blogpost.belongsToMany(models.keyword, {through: models.blogpost_keyword});
+    // Blogpost.hasMany(models.blogpost_keyword)
   };
   return Blogpost;
 };
