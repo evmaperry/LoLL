@@ -11,6 +11,7 @@ import Invasives from './components/Invasives';
 import Mission from './components/Mission';
 import Shoreline from './components/Shoreline';
 import GetInvolved from './components/GetInvolved';
+import PostPage from './components/PostPage';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -60,7 +61,17 @@ const router = createBrowserRouter(
           </>
         }
       />
+      <Route
+        path='/post'
+        element={
+          <>
+            <TopNav />
+            <PostPage />
+          </>
+        }
+      />
     </Route>
+
   )
 );
 

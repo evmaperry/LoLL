@@ -7,6 +7,7 @@ const Blog = Router();
 const Blogpost: any = models.blogpost;
 const Keyword: any = models.keyword;
 const Blogpost_keyword: any = models.blogpost_keyword;
+const User: any = models.user;
 
 interface Blogpost {
   title: string;
@@ -23,13 +24,22 @@ Blog.get('/test', (req: Request, res: Response) => {
 Blog.get('/post/:postId', async (req: Request, res: Response) => {
   try {
     const postId = req.params.postId;
-    const post = await Blogpost.findByPk(postId, { include: Keyword });
+    const post = await Blogpost.findByPk(postId, { include: [Keyword, User] });
     res.status(200).send(post);
   } catch (e) {
     res.status(500).send(e);
     console.error('SERVER ERROR: failed to get blog post', e);
   }
 });
+
+Blog.get('/getAllPosts', async (req: Request, res: Response) => {
+  try {
+    const allPostsResponse = await Blogpost.findAll({ include: [Keyword, User]});
+    res.status(200).send(allPostsResponse);
+  } catch (e) {
+    console.error("SERVER ERROR: failed to get all posts", e);
+  }
+})
 
 Blog.post('/createPost', async (req: Request, res: Response) => {
   // couldn't create keyword in one felled swoop bc couldn't figure out how to make keyword unique this way
@@ -93,7 +103,6 @@ Blog.delete('/deletePost/:postId', async (req: Request, res: Response) => {
     // isolate the keyword id, save for later
     const KeywordIds = findKeywordsResponse.map(record=>record.keywordId);
 
-
     // then delete the blog post, which will delete records in Blogpost_keywords
     const deleteBlogpostResponse = await Blogpost.destroy({
       where: {
@@ -114,8 +123,6 @@ Blog.delete('/deletePost/:postId', async (req: Request, res: Response) => {
         const destroyResponse = Keyword.destroy({where: {id}});
       }
     })
-
-    // console.log('dBR', deleteBlogpostResponse);
 
     if (deleteBlogpostResponse === 1) {
       res.status(200).send('Blogpost deleted');
