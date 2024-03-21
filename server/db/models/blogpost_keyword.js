@@ -14,8 +14,8 @@ module.exports = (sequelize, Sequelize) => {
     // }
   });
   Blogpost_keyword.associate = function (models) {
-    // Blogpost_keyword.belongsTo(models.blogpost);
-    // Blogpost_keyword.belongsTo(models.keyword);
+    Blogpost_keyword.belongsTo(models.blogpost);
+    Blogpost_keyword.belongsTo(models.keyword);
   };
   return Blogpost_keyword;
 };

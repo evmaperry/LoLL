@@ -32,6 +32,7 @@ Blog.get('/post/:postId', async (req: Request, res: Response) => {
 });
 
 Blog.post('/createPost', async (req: Request, res: Response) => {
+  // couldn't create keyword in one felled swoop bc couldn't figure out how to make keyword unique this way
   try {
     const blogpost: Blogpost = req.body.blogpost;
     const createBlogpostResponse = await Blogpost.create({
@@ -39,21 +40,16 @@ Blog.post('/createPost', async (req: Request, res: Response) => {
       content: blogpost.content,
       category: blogpost.category,
       userId: blogpost.userId,
-      //   keywords: blogpost.keywords.map((keyword) => {
-      //     return { keyword };
-      //   }),
-      // },
-      // {
-      //   include: Keyword,
     });
 
+    // for each keyword...
     blogpost.keywords.forEach(async (keyword) => {
+      // see if it's already in the keyword table
       const findKeywordResponse = await Keyword.findOne({
         where: {
           keyword,
         },
       });
-
       // if a keyword is not found, create a new one, create blogpost_keywords too
       if (!findKeywordResponse) {
         try {
@@ -70,7 +66,6 @@ Blog.post('/createPost', async (req: Request, res: Response) => {
           console.error('SERVER ERROR: failed to create keyword', e);
         }
       }
-
       // if a keyword is found, increment the postCount, create blogpost_keywords
       else if (findKeywordResponse) {
         const keywordIncrementResponse = await Keyword.increment({postCount: 1}, {where: {keyword}})
@@ -91,15 +86,36 @@ Blog.post('/createPost', async (req: Request, res: Response) => {
 
 Blog.delete('/deletePost/:postId', async (req: Request, res: Response) => {
   const postId = req.params.postId;
-  console.log('postId', postId);
+
   try {
+    // get all keywords associated with post
+    const findKeywordsResponse = await Blogpost_keyword.findAll({where:{blogpostId: postId}});
+    // isolate the keyword id, save for later
+    const KeywordIds = findKeywordsResponse.map(record=>record.keywordId);
+
+
+    // then delete the blog post, which will delete records in Blogpost_keywords
     const deleteBlogpostResponse = await Blogpost.destroy({
       where: {
         id: postId,
       },
     });
 
-    console.log('dBR', deleteBlogpostResponse);
+    // THEN DEAL WITH KEYWORDS TABLE
+    // for each keyword id
+    KeywordIds.forEach(async (id)=>{
+      // find it
+      const keywordResponse = await Keyword.findByPk(id);
+      // check if there's more than one
+      if (keywordResponse.postCount > 1){
+        // if so, decrement it
+        const decrementResponse = Keyword.decrement({postCount: 1}, {where: {id}});
+      } else { // or else delete it
+        const destroyResponse = Keyword.destroy({where: {id}});
+      }
+    })
+
+    // console.log('dBR', deleteBlogpostResponse);
 
     if (deleteBlogpostResponse === 1) {
       res.status(200).send('Blogpost deleted');
